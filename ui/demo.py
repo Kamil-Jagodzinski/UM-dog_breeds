@@ -93,15 +93,9 @@ class AppDemo(QWidget):
         self.pushButton_2.setStyleSheet("background-color: rgb(246, 211, 45)")
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_2.clicked.connect(lambda: self.chooseImage())
-        # self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
-        # self.pushButton_3.setGeometry(QtCore.QRect(1000, 360, 181, 161))
         font = QtGui.QFont()
         font.setFamily("Fira Sans")
         font.setPointSize(26)
-        # self.pushButton_3.setFont(font)
-        # self.pushButton_3.setStyleSheet("background-color: rgb(245, 194, 17)")
-        # self.pushButton_3.setObjectName("pushButton_3")
-        # self.pushButton_3.clicked.connect(lambda: self.openPDF());
         self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_4.setGeometry(QtCore.QRect(1000, 530, 181, 161))
         font = QtGui.QFont()
@@ -186,7 +180,6 @@ class AppDemo(QWidget):
         MainWindow.setWindowTitle(_translate("MainWindow", "Klasyfikator ras psów"))
         self.pushButton.setText(_translate("MainWindow", "Start"))
         self.pushButton_2.setText(_translate("MainWindow", "Dodaj\nzdjęcie"))
-        # self.pushButton_3.setText(_translate("MainWindow", "Opis\nprojektu"))
         self.pushButton_4.setText(_translate("MainWindow", "Reset "))
         self.label.setText(_translate("MainWindow", "Rasa"))
         self.label_2.setText(_translate("MainWindow", "Upuść zdjęcie swojego psa tutaj"))
@@ -219,7 +212,7 @@ class AppDemo(QWidget):
             event.ignore()
 
     def chooseImage(self):
-        path = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file', 'c:\\',"Image files (*.jpg *.png)")
+        path = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file', 'c:\\',"Image files (*.jpg *.png *.jpeg)")
         self.label_2.setImage(path[0])
 
     def openPDF(self):

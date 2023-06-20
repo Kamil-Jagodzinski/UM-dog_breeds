@@ -1,40 +1,141 @@
 import torch
 from PIL import Image, ImageFile
-ImageFile.LOAD_TRUNCATED_IMAGES = True
 import torchvision.transforms as transforms
 import torchvision.models as models
 import torch.nn as nn
-import time
-start_time = time.time()
 
-n_dog_breed_classes = 133
-model_transfer = models.densenet161(pretrained=True)
-n_inputs = model_transfer.classifier.in_features
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
+n_dog_breed_classes = 120
+n_inputs = 2048
+model_transfer = models.resnet50(pretrained=True)
 last_layer = nn.Linear(n_inputs, n_dog_breed_classes)
-model_transfer.classifier = last_layer
-model_transfer.load_state_dict(torch.load('dogs_model.pt', map_location=torch.device('cpu')))
+model_transfer.fc = last_layer
+loaded = torch.load('model_pytorch25.pt', map_location=torch.device('cpu'))
+state_dict = loaded.state_dict()
+model_transfer.load_state_dict(state_dict)
 
-classes = [ '001.Pinczer małpi', '002.Chart afgański', '003.Airedale terrier', '004.Akita', '005.Alaskan malamute', '006.Amerykański pies eskimoski', 
-            '007.Foxhound amerykański', '008.Amerykański Staffordshire terrier', '009.Amerykański spaniel dowodny', '010.Anatolian', '011.Australijski cattle dog', 
-            '012.Owczarek australijski', '013.Terier australijski', '014.Basenji', '015.Basset', '016.Beagle', '017.Bearded collie', 
-            '018.Owczarek francuski beauceron', '019.Bedlington terrier', '020.Malinois', '021.Owczarek belgijski', '022.Tervueren', '023.Berneński pies pasterski', 
-            '024.Bichon frise', '025.Black and tan coonhound', '026.Czarny terier rosyjski', '027.Bloodhound', '028.Bluetick coonhound', '029.Border collie', 
-            '030.Border terrier', '031.Borzoj', '032.Boston terrier', '033.Bouvier des Flandres', '034.Bokser', '035.Boykin spaniel', '036.Owczarek francuski briard', 
-            '037.Épagneul breton', '038.Gryfonik brukselski', '039.Bulterier', '040.Buldog', '041.Bulmastif', '042.Cairn terrier', '043.Canaan Dog', '044.Cane corso',
-            '045.Welsh Corgi Cardigan', '046.Cavalier king charles spaniel', '047.Chesapeake Bay retriever', '048.Chihuahua', '049.Grzywacz chiński', '050.Shar pei', 
-            '051.Chow chow','052.Clumber Spaniel', '053.Cocker spaniel angielski', '054.Owczarek szkocki długowłosy', '055.Curly coated retriever', '056.Jamnik', '057.Dalmatyńczyk', '058.Dandie Dinmont terrier', 
-            '059.Doberman', '060.Dog z Bordeaux', '061.Cocker spaniel angielski', '062.Seter angielski', '063.Springer spaniel angielski', '064.English toy spaniel',
-            '065.Entlebucher', '066.Field Spaniel', '067.Szpic fiński', '068.Flat coated retriever', '069.Buldog francuski', '070.Pinczer średni', 
-            '071.Owczarek niemiecki', '072.Wyżeł niemiecki krótkowłosy ', '073.Wyżeł niemiecki szorstkowłosy', '074.Sznaucer olbrzym', '075.Irish glen of imaal terrier', 
-            '076.Golden retriever', '077.Seter szkocki', '078.Dog niemiecki', '079.Pirenejski pies górski', '080.Duży szwajcarski pies pasterski', '081.Greyhound', '082.Hawańczyk', 
-            '083.Podenco z Ibizy', '084.Islandzki szpic pasterski', '085.Seter irlandzki czerwono-biały ', '086.Seter irlandzki', '087.Terier irlandzki', '088.Irlandzki spaniel dowodny', 
-            '089.Wilczarz irlandzki', '090.Charcik włoski', '091.Chin japoński', '092.Szpic wilczy', '093.Kerry blue terrier', '094.Komondor', '095.Kuvasz', 
-            '096.Labrador retriever', '097.Lakeland terrier', '098.Leonberger', '099.Lhasa apso', '100.Lwi piesek', '101.Maltańczyk', '102.Manchester terrier', 
-            '103.Mastif', '104.Sznaucer miniaturowy', '105.Mastif neapolitański', '106.Nowofundlandczyk', '107.Norfolk terrier', '108.Buhund norweski', '109.Elkhund szary', 
-            '110.Norsk Lundehund', '111.Norwich Terrier', '112.Retriever z Nowej Szkocji', '113.Owczarek staroangielski', '114.Otterhound', '115.Papillon', 
-            '116.Parson Russell terrier', '117.Pekińczyk', '118.Welsh Corgi Pembroke', '119.Petit Basset Griffon Vendéen', '120.Pies faraona', '121.Plott hound', '122.Pies Pointer', 
-            '123.Szpic miniaturowy', '124.Pudel duży', '125.Portugalski pies dowodny', '126.Bernardyn', '127.Australijski silky terier', '128.Foksterier krótkowłosy', '129.Mastif tybetański', 
-            '130.Springer spaniel walijski', '131.Gryfon Korthalsa', '132.Nagi pies meksykański', '133.Yorkshire terrier']
+classes = ["0.affenpinscher",
+           "1.afghan_hound",
+           "2.african_hunting_dog",
+           "3.airedale",
+           "4.american_staffordshire_terrier",
+           "5.appenzeller",
+           "6.australian_terrier",
+           "7.basenji",
+           "8.basset",
+           "9.beagle",
+           "10.bedlington_terrier",
+           "11.bernese_mountain_dog",
+           "12.black-and-tan_coonhound",
+           "13.blenheim_spaniel",
+           "14.bloodhound",
+           "15.bluetick",
+           "16.border_collie",
+           "17.border_terrier",
+           "18.borzoi",
+           "19.boston_bull",
+           "20.bouvier_des_flandres",
+           "21.boxer",
+           "22.brabancon_griffon",
+           "23.briard",
+           "24.brittany_spaniel",
+           "25.bull_mastiff",
+           "26.cairn",
+           "27.cardigan",
+           "28.chesapeake_bay_retriever",
+           "29.chihuahua",
+           "30.chow",
+           "31.clumber",
+           "32.cocker_spaniel",
+           "33.collie",
+           "34.curly-coated_retriever",
+           "35.dandie_dinmont",
+           "36.dhole",
+           "37.dingo",
+           "38.doberman",
+           "39.english_foxhound",
+           "40.english_setter",
+           "41.english_springer",
+           "42.entlebucher",
+           "43.eskimo_dog",
+           "44.flat-coated_retriever",
+           "45.french_bulldog",
+           "46.german_shepherd",
+           "47.german_short-haired_pointer",
+           "48.giant_schnauzer",
+           "49.golden_retriever",
+           "50.gordon_setter",
+           "51.greater_swiss_mountain_dog",
+           "52.great_dane",
+           "53.great_pyrenees",
+           "54.groenendael",
+           "55.ibizan_hound",
+           "56.irish_setter",
+           "57.irish_terrier",
+           "58.irish_water_spaniel",
+           "59.irish_wolfhound",
+           "60.italian_greyhound",
+           "61.japanese_spaniel",
+           "62.keeshond",
+           "63.kelpie",
+           "64.kerry_blue_terrier",
+           "65.komondor",
+           "66.kuvasz",
+           "67.labrador_retriever",
+           "68.lakeland_terrier",
+           "69.leonberg",
+           "70.lhasa",
+           "71.malamute",
+           "72.malinois",
+           "73.maltese_dog",
+           "74.mexican_hairless",
+           "75.miniature_pinscher",
+           "76.miniature_poodle",
+           "77.miniature_schnauzer",
+           "78.newfoundland",
+           "79.norfolk_terrier",
+           "80.norwegian_elkhound",
+           "81.norwich_terrier",
+           "82.old_english_sheepdog",
+           "83.otterhound",
+           "84.papillon",
+           "85.pekinese",
+           "86.pembroke",
+           "87.pomeranian",
+           "88.pug",
+           "89.redbone",
+           "90.rhodesian_ridgeback",
+           "91.rottweiler",
+           "92.saint_bernard",
+           "93.saluki",
+           "94.samoyed",
+           "95.schipperke",
+           "96.scotch_terrier",
+           "97.scottish_deerhound",
+           "98.sealyham_terrier",
+           "99.shetland_sheepdog",
+           "100.shih-tzu",
+           "101.siberian_husky",
+           "102.silky_terrier",
+           "103.soft-coated_wheaten_terrier",
+           "104.staffordshire_bullterrier",
+           "105.standard_poodle",
+           "106.standard_schnauzer",
+           "107.sussex_spaniel",
+           "108.tibetan_mastiff",
+           "109.tibetan_terrier",
+           "110.toy_poodle",
+           "111.toy_terrier",
+           "112.vizsla",
+           "113.walker_hound",
+           "114.weimaraner",
+           "115.welsh_springer_spaniel",
+           "116.west_highland_white_terrier",
+           "117.whippet",
+           "118.wire-haired_fox_terrier",
+           "119.yorkshire_terrier"]
+
 
 def predict_breed_transfer(img_path):
     model_transfer.eval()
@@ -48,23 +149,11 @@ def predict_breed_transfer(img_path):
 
     def get_index(i):
         return classes[top3.indices[0][i].item()]
-    
+
     return get_index(0), get_index(1), get_index(2)
 
 
 def classify(path):
+    ret = predict_breed_transfer(path)
 
-    print("algorithm working...\n")
-
-    n_dog_breed_classes = 133
-    model_transfer = models.densenet161(pretrained=True)
-    n_inputs = model_transfer.classifier.in_features
-    last_layer = nn.Linear(n_inputs, n_dog_breed_classes)
-    model_transfer.classifier = last_layer
-    model_transfer.load_state_dict(torch.load('dogs_model.pt', map_location=torch.device('cpu')))
-
-
-    dogPath = path
-    print("Your dog looks like: ")
-    #print(predict_breed_transfer(path)[:])
-    return predict_breed_transfer(path)[0][4:], predict_breed_transfer(path)[1][4:], predict_breed_transfer(path)[2][4:]
+    return ret[0].split('.')[1], ret[1].split('.')[1], ret[2].split('.')[1]
