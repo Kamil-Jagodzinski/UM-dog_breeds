@@ -17,6 +17,7 @@ from PIL import Image
 import image_recognition
 import webbrowser
 
+
 class MouseTracker(QWidget):
     def init(self):
         super().init()
@@ -24,13 +25,14 @@ class MouseTracker(QWidget):
 
     def isInLable(self, event):
         mp = event.pos()
-        if( mp.x() > 20 and 
-            mp.y() > 20 and
-            mp.x() < 20 + 971 and
-            mp.y() < 20 + 671 ):
-            return True;
+        if (mp.x() > 20 and
+                mp.y() > 20 and
+                mp.x() < 20 + 971 and
+                mp.y() < 20 + 671):
+            return True
         else:
-            return False;
+            return False
+
 
 class ImageLabel(QLabel):
     def __init__(self, widget):
@@ -40,25 +42,23 @@ class ImageLabel(QLabel):
         self.image = QImage(path)
 
         if self.image.height() > 671 or self.image.width() > 971:
-            self.image = self.image.smoothScaled(971,671)
+            self.image = self.image.smoothScaled(971, 671)
 
         if self.image.height() < 50 or self.image.width() < 50:
-            self.image = self.image.smoothScaled(50,50)
+            self.image = self.image.smoothScaled(50, 50)
 
         self.setPixmap(QPixmap(self.image))
 
         self.result1, self.result2, self.result3 = image_recognition.classify(path)
 
-
     def setPixmap(self, image):
         super().setPixmap(image)
-
 
 
 class AppDemo(QWidget):
     def __init__(self):
         super().__init__()
-        
+
         self.mouse = MouseTracker()
         self.setAcceptDrops(True)
         self.setObjectName("MainWindow")
@@ -72,7 +72,8 @@ class AppDemo(QWidget):
         self.setStyleSheet("")
         self.centralwidget = QtWidgets.QWidget(self)
         self.photoViewer = ImageLabel(self.centralwidget)
-        self.centralwidget.setStyleSheet("background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.506, stop:0 rgba(66, 66, 113, 255), stop:1 rgba(0, 0, 0, 255));")
+        self.centralwidget.setStyleSheet(
+            "background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.506, stop:0 rgba(66, 66, 113, 255), stop:1 rgba(0, 0, 0, 255));")
         self.centralwidget.setObjectName("centralwidget")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(1000, 20, 181, 161))
@@ -125,11 +126,11 @@ class AppDemo(QWidget):
         self.label_2.setLayoutDirection(QtCore.Qt.RightToLeft)
         self.label_2.setAutoFillBackground(False)
         self.label_2.setStyleSheet("background-color: rgba(200, 200, 200, 150);\n"
-"color: rgb(0,0,0);\n"
-"border: 4px dashed rgb(255, 255, 255);\n"
-"\n"
-"\n"
-"")
+                                   "color: rgb(0,0,0);\n"
+                                   "border: 4px dashed rgb(255, 255, 255);\n"
+                                   "\n"
+                                   "\n"
+                                   "")
         self.label_2.setTextFormat(QtCore.Qt.AutoText)
         self.label_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_2.setObjectName("label_2")
@@ -140,7 +141,7 @@ class AppDemo(QWidget):
         font.setPointSize(20)
         self.label_3.setFont(font)
         self.label_3.setStyleSheet("background-color: rgb(222, 221, 218);\n"
-"text-align: center;")
+                                   "text-align: center;")
         self.label_3.setAlignment(QtCore.Qt.AlignCenter)
         self.label_3.setObjectName("label_3")
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
@@ -171,7 +172,6 @@ class AppDemo(QWidget):
         self.label_6.setAlignment(QtCore.Qt.AlignCenter)
         self.label_6.setObjectName("label_6")
 
-
         self.retranslateUi(self)
         QtCore.QMetaObject.connectSlotsByName(self)
 
@@ -187,7 +187,6 @@ class AppDemo(QWidget):
         self.label_4.setText(_translate("MainWindow", ""))
         self.label_5.setText(_translate("MainWindow", ""))
         self.label_6.setText(_translate("MainWindow", "Inne możliwe rasy"))
-
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasImage:
@@ -212,8 +211,9 @@ class AppDemo(QWidget):
             event.ignore()
 
     def chooseImage(self):
-        path = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file', 'c:\\',"Image files (*.jpg *.png *.jpeg)")
-        self.label_2.setImage(path[0])
+        path = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file', os.getcwd(), "Image files (*.jpg *.png *.jpeg)")
+        if path[0] != '':
+            self.label_2.setImage(path[0])
 
     def openPDF(self):
         webbrowser.open_new('doc.pdf')
@@ -232,7 +232,6 @@ class AppDemo(QWidget):
 
     def set_image(self, file_path):
         self.photoViewer.setImage(file_path)
-        
 
 
 app = QApplication(sys.argv)
