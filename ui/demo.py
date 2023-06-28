@@ -215,8 +215,6 @@ class AppDemo(QWidget):
         if path[0] != '':
             self.label_2.setImage(path[0])
 
-    def openPDF(self):
-        webbrowser.open_new('doc.pdf')
 
     def reset(self):
         self.label_2.clear()
